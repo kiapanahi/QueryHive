@@ -3,11 +3,13 @@
     <PropertyGroup>
         <Version>1.0.0</Version>
         <Authors>Kia Raad</Authors>
-        
+
         <TargetFramework>net8.0</TargetFramework>
-        
+
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
         <LangVersion>latest</LangVersion>
-        
         <AnalysisLevel>latest-recommended</AnalysisLevel>
         <AnalysisMode>recommended</AnalysisMode>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
