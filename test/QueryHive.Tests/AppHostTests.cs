@@ -3,7 +3,7 @@ namespace QueryHive.Tests;
 public class AppHostTests
 {
     [Fact]
-    public async Task GetWebResourceRootReturnsOkStatusCode()
+    public async Task EnsureRedisResourceInitialized()
     {
         // Arrange
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.QueryHive_AppHost>();
@@ -17,12 +17,9 @@ public class AppHostTests
         var resourceNotificationService = app.Services.GetRequiredService<ResourceNotificationService>();
         await app.StartAsync();
 
-        //// Act
-        //var httpClient = app.CreateHttpClient("webfrontend");
-        //await resourceNotificationService.WaitForResourceAsync("webfrontend", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
-        //var response = await httpClient.GetAsync("/");
+        var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-        //// Assert
-        //Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //Assert
+        await resourceNotificationService.WaitForResourceAsync("hive-redis", KnownResourceStates.Running, timeoutToken.Token);
     }
 }
