@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C187A4D3-C463-41E7-A7C6-672E6098CE95}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		LICENSE = LICENSE
+		nuget.config = nuget.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{85CCDD85-DE26-4A64-8CF8-5FA773BE6D56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryHive.AppHost", "src\QueryHive.AppHost\QueryHive.AppHost.csproj", "{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryHive.ServiceDefaults", "src\QueryHive.ServiceDefaults\QueryHive.ServiceDefaults.csproj", "{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{218F0788-F41A-4D15-A2A6-40DA8BCE5DFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryHive.Tests", "test\QueryHive.Tests\QueryHive.Tests.csproj", "{E0736F50-AD38-4BD4-A209-BFD2B93CB911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0736F50-AD38-4BD4-A209-BFD2B93CB911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0736F50-AD38-4BD4-A209-BFD2B93CB911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0736F50-AD38-4BD4-A209-BFD2B93CB911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0736F50-AD38-4BD4-A209-BFD2B93CB911}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4C7AC6C-880F-4B5C-95BD-A4A51DE763FA} = {85CCDD85-DE26-4A64-8CF8-5FA773BE6D56}
+		{24FBEE27-D609-4D18-92D3-DF5F1C5CBA68} = {85CCDD85-DE26-4A64-8CF8-5FA773BE6D56}
+		{E0736F50-AD38-4BD4-A209-BFD2B93CB911} = {218F0788-F41A-4D15-A2A6-40DA8BCE5DFE}
+	EndGlobalSection
+EndGlobal
