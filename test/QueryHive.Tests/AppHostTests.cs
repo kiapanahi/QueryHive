@@ -21,5 +21,6 @@ public class AppHostTests
 
         //Assert
         await resourceNotificationService.WaitForResourceAsync("hive-redis", KnownResourceStates.Running, timeoutToken.Token);
+        await resourceNotificationService.WaitForResourceAsync("hive-web", KnownResourceStates.Running, timeoutToken.Token);
     }
 }

@@ -5,8 +5,6 @@ public static class Extensions
 {
     public static IHostApplicationBuilder AddQueryHive(this IHostApplicationBuilder builder)
     {
-        builder.AddServiceDefaults();
-
         builder.AddKeyedRedisClient("hive-redis");
 
         builder.UseOrleans();
