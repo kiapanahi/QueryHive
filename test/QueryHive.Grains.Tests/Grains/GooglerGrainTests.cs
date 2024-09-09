@@ -1,26 +1,23 @@
-using Microsoft.Extensions.Logging.Abstractions;
-
 using Orleans.TestingHost;
 
 using QueryHive.Silo.Googler;
 
-namespace QueryHive.Grains.Tests;
+namespace QueryHive.Grains.Tests.Grains;
 
-public class GooglerGrainTests
+[Collection(ClusterCollectionFixture.Name)]
+public class GooglerGrainTests(ClusterFixture fixture)
 {
     private const string SampleSearchTerm = "Orleans";
     private const string ExpectedGoogleSearchPageLink = "https://www.google.com/?q=Orleans";
     private const string ExpectedGoogleSearchResultLink = "https://www.google.com/search?q=Orleans";
+
+    private readonly TestCluster _cluster = fixture.Cluster;
+
     [Fact]
     public async Task CreateGoogleSearchPageLink_ShouldReturnValidUri()
     {
-
-        var builder = new TestClusterBuilder();
-        var cluster = builder.Build();
-        cluster.Deploy();
-
         // Arrange
-        var grain = cluster.GrainFactory.GetGrain<IGooglerGrain>(SampleSearchTerm);
+        var grain = _cluster.GrainFactory.GetGrain<IGooglerGrain>(SampleSearchTerm);
 
         // Act
         var result = await grain.CreateGoogleSearchPageLink();
@@ -33,13 +30,8 @@ public class GooglerGrainTests
     [Fact]
     public async Task CreateGoogleSearchResultLink_ShouldReturnValidUri()
     {
-
-        var builder = new TestClusterBuilder();
-        var cluster = builder.Build();
-        cluster.Deploy();
-
         // Arrange
-        var grain = cluster.GrainFactory.GetGrain<IGooglerGrain>(SampleSearchTerm);
+        var grain = _cluster.GrainFactory.GetGrain<IGooglerGrain>(SampleSearchTerm);
 
         // Act
         var result = await grain.CreateGoogleSearchResultLink();
