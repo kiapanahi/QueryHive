@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QueryHive.ServiceDefaults\QueryHive.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\QueryHive.Web\QueryHive.Web.csproj" />
   </ItemGroup>
 
 </Project>

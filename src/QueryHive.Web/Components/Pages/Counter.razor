@@ -1,0 +1,55 @@
+﻿@page "/counter"
+@using QueryHive.Silo.Googler
+@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<div class="mt-4">
+    <input type="text" class="form-control" @bind="searchTerm" />
+    <button class="btn btn-primary" @onclick="Search">search</button>
+    <button class="btn btn-primary" @onclick="Result">result</button>
+
+    @if (!string.IsNullOrWhiteSpace(searchPage))
+    {
+        <a href="@searchPage" target="_blank">Go to google search</a>
+    }
+    @if (!string.IsNullOrWhiteSpace(searchResult))
+    {
+        <a href="@searchResult" target="_blank">Go to google result</a>
+    }
+</div>
+
+@code {
+
+    [Inject]
+    private IGrainFactory? grainFactory { get; set; }
+
+    private int currentCount = 0;
+
+    private string searchTerm = string.Empty;
+    private string searchPage = string.Empty;
+    private string searchResult = string.Empty;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private async Task Search()
+    {
+        var grain = grainFactory!.GetGrain<IGooglerGrain>(searchTerm);
+        searchPage = (await grain.CreateGoogleSearchPageLink()).ToString();
+    }
+
+    private async Task Result()
+    {
+        var grain = grainFactory!.GetGrain<IGooglerGrain>(searchTerm);
+        searchResult = (await grain.CreateGoogleSearchResultLink()).ToString();
+    }
+}
