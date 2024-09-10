@@ -13,8 +13,9 @@ internal sealed partial class GooglerGrain(
     ILogger<GooglerGrain> logger) : Grain, IGooglerGrain
 {
 
-    private static readonly CompositeFormat GoogleSearchPageLink = CompositeFormat.Parse("https://www.google.com/?q={0}");
-    private static readonly CompositeFormat GoogleSearchResultLink = CompositeFormat.Parse("https://www.google.com/search?q={0}");
+    private static readonly CompositeFormat SearchPageTemplate = CompositeFormat.Parse("https://www.google.com/?q={0}");
+    private static readonly CompositeFormat ResultPageTemplate = CompositeFormat.Parse("https://www.google.com/search?q={0}");
+
     private readonly IPersistentState<SearchTermModel> _state = state;
     private readonly ILogger<GooglerGrain> _logger = logger;
 
@@ -24,28 +25,37 @@ internal sealed partial class GooglerGrain(
         {
             Log.StateExists(_logger, _state.Etag, _state.State);
 
-            if (string.IsNullOrEmpty(_state.State.GoogleSearchPageLink))
+            if (_state.State.IsSearchLinkPopulated())
             {
-
-                var googleSearchPageLink = CreateUri(GoogleSearchPageLink);
-                //await _state.ClearStateAsync().ConfigureAwait(false);
-                _state.State.GoogleSearchPageLink = googleSearchPageLink;
-                await _state.WriteStateAsync().ConfigureAwait(false);
-                //await _state.ReadStateAsync().ConfigureAwait(false);
+                return _state.State.SearchPage;
             }
-            var stateUri = _state.State.GoogleSearchPageLink;
-            return stateUri;
+
+            var searchPageLink = CreateUri(SearchPageTemplate);
+            //await _state.ClearStateAsync();
+            _state.State.SetSearchLink(searchPageLink);
+            //await _state.ReadStateAsync();
         }
-        var uri = CreateUri(GoogleSearchPageLink);
-        _state.State = new SearchTermModel
+        else
         {
-            Term = this.GetPrimaryKeyString(),
-            GoogleSearchPageLink = uri,
-            GoogleSearchResultLink = string.Empty,
-            CreationDate = DateTimeOffset.UtcNow
-        };
-        await _state.WriteStateAsync().ConfigureAwait(false);
-        return uri;
+            _state.State = new SearchTermModel
+            {
+                Term = this.GetPrimaryKeyString(),
+                SearchPage = CreateUri(SearchPageTemplate),
+                ResultPage = string.Empty,
+                CreationDate = DateTimeOffset.UtcNow
+            };
+        }
+
+        try
+        {
+            await _state.WriteStateAsync();
+            return _state.State.SearchPage;
+        }
+        catch (Exception e)
+        {
+            Log.WriteStateThrew(_logger, e);
+            throw;
+        }
     }
 
     public async ValueTask<string> CreateGoogleSearchResultLink()
@@ -54,28 +64,37 @@ internal sealed partial class GooglerGrain(
         {
             Log.StateExists(_logger, _state.Etag, _state.State);
 
-            if (string.IsNullOrEmpty(_state.State.GoogleSearchResultLink))
+            if (_state.State.IsResultLinkPopulated())
             {
-
-                var googleSearchResultPage = CreateUri(GoogleSearchResultLink);
-                //await _state.ClearStateAsync().ConfigureAwait(false);
-                _state.State.GoogleSearchResultLink = googleSearchResultPage;
-                await _state.WriteStateAsync().ConfigureAwait(false);
-                //await _state.ReadStateAsync().ConfigureAwait(false);
+                return _state.State.ResultPage;
             }
-            var stateUri = _state.State.GoogleSearchResultLink;
-            return stateUri;
+
+            var resultPageLink = CreateUri(ResultPageTemplate);
+            //await _state.ClearStateAsync();
+            _state.State.SetResultLink(resultPageLink);
+            //await _state.ReadStateAsync();
         }
-        var uri = CreateUri(GoogleSearchResultLink);
-        _state.State = new SearchTermModel
+        else
         {
-            Term = this.GetPrimaryKeyString(),
-            GoogleSearchPageLink = string.Empty,
-            GoogleSearchResultLink = uri,
-            CreationDate = DateTimeOffset.UtcNow
-        };
-        await _state.WriteStateAsync().ConfigureAwait(false);
-        return uri;
+            _state.State = new SearchTermModel
+            {
+                Term = this.GetPrimaryKeyString(),
+                SearchPage = string.Empty,
+                ResultPage = CreateUri(ResultPageTemplate),
+                CreationDate = DateTimeOffset.UtcNow
+            };
+        }
+
+        try
+        {
+            await _state.WriteStateAsync();
+            return _state.State.ResultPage;
+        }
+        catch (Exception e)
+        {
+            Log.WriteStateThrew(_logger, e);
+            throw;
+        }
     }
 
     private string CreateUri(CompositeFormat googleUri)
@@ -112,5 +131,12 @@ internal sealed partial class GooglerGrain(
             EventId = 20,
             EventName = "ErrorCreatingRedirectUri")]
         public static partial void ErrorCreatingRedirectUri(ILogger logger);
+
+        [LoggerMessage(LogLevel.Error,
+            "Failed to write state",
+            EventId = 31,
+            EventName = "WriteStateThrew",
+            Message = "Error while writing state")]
+        public static partial void WriteStateThrew(ILogger logger, Exception ex);
     }
 }
