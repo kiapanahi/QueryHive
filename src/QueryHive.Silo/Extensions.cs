@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using QueryHive.Silo.Googler;
 
 namespace QueryHive.Silo;
 public static class Extensions
@@ -8,6 +11,8 @@ public static class Extensions
         builder.AddKeyedRedisClient("hive-redis");
 
         builder.UseOrleans();
+
+        builder.Services.AddSingleton<GooglerMetrics>();
 
         return builder;
     }

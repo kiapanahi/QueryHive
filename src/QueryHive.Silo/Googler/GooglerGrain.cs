@@ -10,6 +10,7 @@ namespace QueryHive.Silo.Googler;
 
 internal sealed partial class GooglerGrain(
     [PersistentState("search-term", "queries")] IPersistentState<SearchTermModel> state,
+    GooglerMetrics metrics,
     ILogger<GooglerGrain> logger) : Grain, IGooglerGrain
 {
 
@@ -18,6 +19,7 @@ internal sealed partial class GooglerGrain(
 
     private readonly IPersistentState<SearchTermModel> _state = state;
     private readonly ILogger<GooglerGrain> _logger = logger;
+    private readonly GooglerMetrics _metrics = metrics;
 
     public async ValueTask<string> CreateGoogleSearchPageLink()
     {
